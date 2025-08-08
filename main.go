@@ -1,10 +1,10 @@
 package main
 
 import (
+	"HIS-middleware/api"
+	"HIS-middleware/config"
+	"HIS-middleware/db"
 	"github.com/gin-gonic/gin"
-	"hospital-middleware/api"
-	"hospital-middleware/config"
-	"hospital-middleware/db"
 )
 
 func main() {

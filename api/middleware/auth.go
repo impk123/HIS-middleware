@@ -1,15 +1,40 @@
 package middleware
 
 import (
-	"HIS-middleware/api/handlers"
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
+	"github.com/impk123/HIS-middleware/api/handlers"
+	"net/http"
+	"strings"
 )
 
-func AuthMiddleware(db *gorm.DB) gin.HandlerFunc {
+func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// Implement your authentication logic here
-		// Example: Check JWT token or session
+		authHeader := c.GetHeader("Authorization")
+		if authHeader == "" {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header is required"})
+			c.Abort()
+			return
+		}
+
+		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+		if tokenString == authHeader {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Bearer token required"})
+			c.Abort()
+			return
+		}
+
+		claims, err := handlers.ValidateJWTToken(tokenString)
+		if err != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token: " + err.Error()})
+			c.Abort()
+			return
+		}
+
+		// เซ็ตข้อมูลจาก token ลงใน context
+		c.Set("staff_id", claims.StaffID)
+		c.Set("hospital", "11111")
+		c.Set("username", claims.Username)
+
 		c.Next()
 	}
 }

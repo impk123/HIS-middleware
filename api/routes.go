@@ -1,8 +1,9 @@
 package api
 
 import (
-	"HIS-middleware/api/handlers"
-	"HIS-middleware/api/middleware"
+	"github.com/impk123/HIS-middleware/api/handlers"
+	"github.com/impk123/HIS-middleware/api/middleware"
+
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -14,8 +15,9 @@ func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 
 	// Patient APIs (protected)
 	authGroup := r.Group("/")
-	authGroup.Use(middleware.AuthMiddleware(db))
+	authGroup.Use(middleware.AuthMiddleware())
 	{
+		authGroup.POST("/patient/create", handlers.CreatePatient(db))
 		authGroup.GET("/patient/search", handlers.SearchPatient(db))
 	}
 }

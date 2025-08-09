@@ -1,10 +1,12 @@
 package main
 
 import (
-	"HIS-middleware/api"
-	"HIS-middleware/config"
-	"HIS-middleware/db"
 	"github.com/gin-gonic/gin"
+	"github.com/impk123/HIS-middleware/api"
+	"github.com/impk123/HIS-middleware/config"
+	"github.com/impk123/HIS-middleware/db"
+
+	"fmt"
 )
 
 func main() {
@@ -12,7 +14,11 @@ func main() {
 	cfg := config.LoadConfig()
 
 	// Initialize database
-	db.InitDB(cfg)
+	db.InitDB(*cfg)
+
+	// migrate ตาราง
+	fmt.Println("migrate ตาราง")
+	db.Migrate()
 
 	// Set up Gin router
 	r := gin.Default()

@@ -2,8 +2,9 @@ package integration
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/impk123/HIS-middleware/api"
+	"github.com/impk123/HIS-middleware/db"
 	"github.com/stretchr/testify/assert"
-	"hospital-middleware/api"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -12,7 +13,7 @@ import (
 func TestPatientSearch(t *testing.T) {
 	// Setup test router
 	r := gin.Default()
-	api.SetupRoutes(r, db) // You'll need to mock your DB
+	api.SetupRoutes(r, db.GetDB()) // You'll need to mock your DB
 
 	// Test cases
 	t.Run("Unauthorized", func(t *testing.T) {

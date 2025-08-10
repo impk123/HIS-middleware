@@ -32,28 +32,21 @@ func CreatePatient(db *gorm.DB) gin.HandlerFunc {
 func SearchPatient(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// ดึง hospital จาก staff ที่ล็อกอิน
-		usernamex, exists := c.Get("username")
 		staffHospital, exists := c.Get("hospital")
 		fmt.Println(staffHospital)
-		fmt.Print(usernamex)
 		if !exists {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "login unauthorized"})
 			return
 		}
 
-		// ดึง query parameters
-		query := c.Request.URL.Query()
-		searchParams := models.Patient{
-			NationalID:  query.Get("national_id"),
-			PassportID:  query.Get("passport_id"),
-			FirstNameTh: query.Get("first_name"),
-			LastNameTh:  query.Get("last_name"),
-			PhoneNumber: query.Get("phone_number"),
-			Email:       query.Get("email"),
-			Hospital:    staffHospital.(string),
+		// รับค่า body json จาก postman
+		var patient models.Patient
+		if err := c.ShouldBindJSON(&patient); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
 		}
 
-		if nationalID := query.Get("national_id"); nationalID != "" {
+		if nationalID := patient.NationalID; nationalID != "" {
 			hospitalAClient := his.NewHospitalAClient("https://hospital-a.api.co.th")
 			patient, err := hospitalAClient.SearchPatient(nationalID)
 			if err == nil {
@@ -61,6 +54,7 @@ func SearchPatient(db *gorm.DB) gin.HandlerFunc {
 				newPatient := models.Patient{
 					FirstNameTh: patient.FirstNameTH,
 					LastNameTh:  patient.LastNameTH,
+					NationalID:  nationalID,
 					// ... map all fields ...
 					Hospital: staffHospital.(string),
 				}
@@ -70,25 +64,29 @@ func SearchPatient(db *gorm.DB) gin.HandlerFunc {
 
 		// สร้าง dynamic query
 		dbQuery := db.Model(&models.Patient{})
-		if searchParams.NationalID != "" {
-			dbQuery = dbQuery.Where("national_id = ?", searchParams.NationalID)
+		if patient.NationalID != "" {
+			dbQuery = dbQuery.Where("national_id = ? AND hospital = ?", patient.NationalID, staffHospital)
 		}
-		if searchParams.PassportID != "" {
-			dbQuery = dbQuery.Where("passport_id = ?", searchParams.PassportID)
+		if patient.PassportID != "" {
+			dbQuery = dbQuery.Where("passport_id = ? AND hospital = ?", patient.PassportID, staffHospital)
 		}
-		if searchParams.FirstNameTh != "" {
-			dbQuery = dbQuery.Where("first_name_th LIKE ?", "%"+searchParams.FirstNameTh+"%")
+		if patient.FirstNameTh != "" {
+			dbQuery = dbQuery.Where("first_name_th LIKE ? AND hospital = ?", "%"+patient.FirstNameTh+"%", staffHospital)
+			fmt.Println(dbQuery)
 		}
-		if searchParams.LastNameTh != "" {
-			dbQuery = dbQuery.Where("last_name_th LIKE ?", "%"+searchParams.LastNameTh+"%")
+		if patient.LastNameTh != "" {
+			dbQuery = dbQuery.Where("last_name_th LIKE ? AND hospital = ?", "%"+patient.LastNameTh+"%", staffHospital)
 		}
-		if searchParams.PhoneNumber != "" {
-			dbQuery = dbQuery.Where("phone_number = ?", searchParams.PhoneNumber)
+		if patient.PhoneNumber != "" {
+			dbQuery = dbQuery.Where("phone_number = ? AND hospital = ?", patient.PhoneNumber, staffHospital)
 		}
-		if searchParams.Email != "" {
-			dbQuery = dbQuery.Where("email = ?", searchParams.Email)
+		if patient.Email != "" {
+			dbQuery = dbQuery.Where("email = ? AND hospital = ?", patient.Email, staffHospital)
 		}
-		dbQuery = dbQuery.Where("hospital = ?", searchParams.Hospital)
+		// ถ้าไม่ได้รับ parameter จาก query ให้ดึงทั้งหมด
+		if patient.NationalID == "" && patient.PassportID == "" && patient.FirstNameTh == "" && patient.LastNameTh == "" && patient.PhoneNumber == "" && patient.Email == "" {
+			dbQuery = dbQuery.Where("hospital = ?", staffHospital)
+		}
 
 		var patients []models.Patient
 		if err := dbQuery.Find(&patients).Error; err != nil {
@@ -96,7 +94,12 @@ func SearchPatient(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		// กรองข้อมูล sensitive ก่อนส่งกลับ
+		if len(patients) == 0 {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Patient not found"})
+			return
+		}
+
+		// // กรองข้อมูล sensitive ก่อนส่งกลับ
 		var response []gin.H
 		for _, p := range patients {
 			response = append(response, gin.H{

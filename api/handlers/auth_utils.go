@@ -11,7 +11,7 @@ var jwtSecret = []byte("your-secret-key-here")
 // Claims โครงสร้างข้อมูลที่จะเก็บใน JWT
 type Claims struct {
 	StaffID  uint   `json:"staff_id"`
-	hospital string `json:"hospital"`
+	Hospital string `json:"hospital"`
 	Username string `json:"username"`
 	jwt.StandardClaims
 }
@@ -24,7 +24,7 @@ func GenerateJWTToken(staffID uint, hospital string, username string) (string, e
 	// สร้าง claims
 	claims := &Claims{
 		StaffID:  staffID,
-		hospital: hospital,
+		Hospital: hospital,
 		Username: username,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),

@@ -32,7 +32,7 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		// เซ็ตข้อมูลจาก token ลงใน context
 		c.Set("staff_id", claims.StaffID)
-		c.Set("hospital", "11111")
+		c.Set("hospital", claims.Hospital)
 		c.Set("username", claims.Username)
 
 		c.Next()

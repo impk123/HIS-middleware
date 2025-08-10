@@ -10,9 +10,9 @@ var jwtSecret = []byte("your-secret-key-here")
 
 // Claims โครงสร้างข้อมูลที่จะเก็บใน JWT
 type Claims struct {
-	StaffID  uint   `json:"staff_id"`
-	Hospital string `json:"hospital"`
-	Username string `json:"username"`
+	StaffID  uint   `json:"staff_id" example:"1"`
+	Hospital string `json:"hospital" example:"12123"`
+	Username string `json:"username" example:"admin"`
 	jwt.StandardClaims
 }
 

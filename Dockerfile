@@ -8,6 +8,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o his-middleware .
 
 FROM alpine:latest
 # RUN apk --no-cache add ca-certificates
+
 RUN apk add --no-cache tzdata ca-certificates && \
     cp /usr/share/zoneinfo/Asia/Bangkok /etc/localtime && \
     echo "Asia/Bangkok" > /etc/timezone && \

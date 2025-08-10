@@ -13,9 +13,9 @@ import (
 func CreateStaff(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var request struct {
-			Username string `json:"username" binding:"required"`
-			Password string `json:"password" binding:"required"`
-			Hospital string `json:"hospital" binding:"required"`
+			Username string `json:"username" binding:"required" example:"admin"`
+			Password string `json:"password" binding:"required" example:"admin123"`
+			Hospital string `json:"hospital" binding:"required" example:"12123"`
 		}
 
 		if err := c.ShouldBindJSON(&request); err != nil {
@@ -50,9 +50,9 @@ func CreateStaff(db *gorm.DB) gin.HandlerFunc {
 func StaffLogin(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var request struct {
-			Username string `json:"username" binding:"required"`
-			Password string `json:"password" binding:"required"`
-			Hospital string `json:"hospital" binding:"required"`
+			Username string `json:"username" binding:"required" example:"admin"`
+			Password string `json:"password" binding:"required" example:"admin123"`
+			Hospital string `json:"hospital" binding:"required" example:"12123"`
 		}
 
 		if err := c.ShouldBindJSON(&request); err != nil {

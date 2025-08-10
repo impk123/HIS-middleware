@@ -4,11 +4,9 @@ import (
 	"fmt"
 	"github.com/impk123/HIS-middleware/config"
 	"github.com/impk123/HIS-middleware/db/models"
-	"log"
-
-	// "gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"log"
 )
 
 var database *gorm.DB
@@ -52,6 +50,7 @@ func Migrate() {
 		log.Fatalf("Migration ล้มเหลว: %v", err)
 	}
 	log.Println("Migration สำเร็จ")
+
 }
 
 // GetDB คืนค่า instance *gorm.DB

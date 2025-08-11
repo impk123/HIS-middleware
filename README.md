@@ -35,7 +35,7 @@ See [docs/api-spec.md](docs/api-spec.md)
 
 ## Project Stucture
 - See [docs/project-structure.md](docs/project-structure.md)
-- See [docs/Project-structure.png](docs/Project-structure.png)
+- See [docs/Project-stucture.png](docs/Project-stucture.png)
 
 ## ER Diagram
 See [docs/ERdiagram.png](docs/ERdiagram.png)

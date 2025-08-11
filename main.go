@@ -20,13 +20,6 @@ func main() {
 	fmt.Println("migrate ตาราง")
 	db.Migrate()
 
-	// // Initialize test database
-	// db.InitDBTest(*cfg)
-
-	// // migrate ตารางทดสอบ
-	// fmt.Println("migrate ตารางทดสอบ")
-	// db.MigrateTest()
-
 	// Set up Gin router
 	r := gin.Default()
 

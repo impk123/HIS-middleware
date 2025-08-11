@@ -34,8 +34,8 @@ A middleware system for hospital patient information management.
 See [docs/api-spec.md](docs/api-spec.md)
 
 ## Project Stucture
-See [docs/project-structure.md](docs/project-structure.md)
-See [docs/project-structure.png](docs/project-structure.png)
+- See [docs/project-structure.md](docs/project-structure.md)
+- See [docs/project-structure.png](docs/project-structure.png)
 
 ## ER Diagram
 See [docs/ERdiagram.png](docs/ERdiagram.png)

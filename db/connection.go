@@ -13,13 +13,6 @@ var database *gorm.DB
 
 // InitDB เชื่อมต่อฐานข้อมูลและเก็บ instance ไว้ใน package
 func InitDB(cfg config.Config) {
-	// dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-	// 	cfg.DBUser,
-	// 	cfg.DBPassword,
-	// 	cfg.DBHost,
-	// 	cfg.DBPort,
-	// 	cfg.DBName,
-	// )
 
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
 		cfg.DBHost,
@@ -53,7 +46,6 @@ func Migrate() {
 
 }
 
-// GetDB คืนค่า instance *gorm.DB
 func GetDB() *gorm.DB {
 	return database
 }

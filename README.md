@@ -18,7 +18,7 @@ A middleware system for hospital patient information management.
 
 ## Setup
 1. Clone the repository
-2. Basic understanding of the golang syntax.
+2. Run go mod tidy
 3. Copy `.env.example` to `.env` and configure
 4. Run Docker (bash)
     สร้างและรัน containers 
@@ -33,12 +33,11 @@ A middleware system for hospital patient information management.
 ## API Documentation
 See [docs/api-spec.md](docs/api-spec.md)
 
-## ER Diagram
-See [docs/er-diagram.png](docs/er-diagram.png)
-
 ## Project Stucture
 See [docs/project-structure.md](docs/project-structure.md)
 
+## ER Diagram
+See [docs/ERdiagram.png](docs/ERdiagram.png)
 
 
 

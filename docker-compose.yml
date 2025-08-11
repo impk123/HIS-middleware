@@ -27,10 +27,13 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=HIS_hosp
+      - POSTGRES_MULTIPLE_DATABASES=HIS_hosp,test_his_hosp # ระบุ databases ทั้งสอง
+      - POSTGRES_MULTIPLE_USERS=postgres,postgres # ระบุ users ทั้งสอง
+      - POSTGRES_MULTIPLE_PASSWORDS=postgres,postgres # ระบุ passwords ทั้งสอง
 
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init-multiple-dbs.sh:/docker-entrypoint-initdb.d/init-multiple-dbs.sh
 
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
@@ -49,3 +52,4 @@ services:
 
 volumes:
   postgres_data:
+  test_postgres_data:

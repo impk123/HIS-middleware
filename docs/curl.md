@@ -1,4 +1,4 @@
-package integration
+package curl_test
 
 //สร้างคำสั่ง curl สำหรับทดสอบ API
 

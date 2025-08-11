@@ -14,6 +14,12 @@ RUN apk add --no-cache tzdata ca-certificates && \
     echo "Asia/Bangkok" > /etc/timezone && \
     apk del tzdata
 
+# Copy init script
+COPY docker/postgres/init-multiple-dbs.sh /docker-entrypoint-initdb.d/
+
+# Set execute permission
+RUN chmod +x /docker-entrypoint-initdb.d/init-multiple-dbs.sh
+
 WORKDIR /root/
 COPY --from=builder /app/his-middleware .
 COPY --from=builder /app/.env .
